@@ -5,10 +5,9 @@ import postgres from 'postgres';
 export async function POST(request: NextRequest) { 
 
 
-    
+    try {
     const data = await request.json();
 
- 
 
     isValidTitle(data.title);
     isValidDescription(data.description);
@@ -16,6 +15,16 @@ export async function POST(request: NextRequest) {
 
     await savePost(data.title, data.description, data.autor);
 
+    NextResponse.json({
+        message: 'Post saved succesfuly'
+    })
+    } catch (error){
+    console.error('Error saving post:', error);
+    return NextResponse.json (
+        {error: 'Fail to save post'},
+        {status: 500}
+
+    )}
 
 }
 
@@ -25,7 +34,7 @@ export async function POST(request: NextRequest) {
     function isValidTitle(title: unknown) {
 
         if (typeof title !== 'string') {
-        throw new Error('Title must be a string')
+            throw new Error('Title must be a string')
         }
 
         if (title.length > 40 ) {
@@ -38,7 +47,7 @@ export async function POST(request: NextRequest) {
     function isValidDescription(description: unknown) {
 
         if (typeof description!== 'string') {
-        throw new Error('Title must be a string')
+           throw new Error('Title must be a string')
         }
 
         if (description.length > 100) {
@@ -51,7 +60,7 @@ export async function POST(request: NextRequest) {
     function isValidAutor(autor: unknown) {
 
         if (typeof autor !== 'string') {
-        throw new Error('Title must be a string')
+           throw new Error('Title must be a string')
         }
 
         if (autor.length > 30 ) {
@@ -66,7 +75,7 @@ export async function POST(request: NextRequest) {
         const connectionString = 'postgresql://postgres.wnkutridtrlrzngrksgo:Brandon12345678@aws-0-us-east-1.pooler.supabase.com:6543/postgres'
         const sql = postgres(connectionString)
 
-        
+        await sql `INSERT INTO public.posts(title, description, autor) VALUES (${title},${description}, ${autor} )`;
 
     }
 

@@ -8,11 +8,7 @@ export async function POST(request: NextRequest) {
     try {
     const data = await request.json();
 
-
-    isValidTitle(data.title);
-    isValidDescription(data.description);
-    isValidAutor(data.autor);
-
+    validatePost(data.title, data.description, data.autor);
     await savePost(data.title, data.description, data.autor);
 
     NextResponse.json({
@@ -31,44 +27,12 @@ export async function POST(request: NextRequest) {
 
 
 
-    function isValidTitle(title: unknown) {
+    function validatePost(title: unknown, description: unknown, autor: unknown) {
+    if (typeof title !== 'string' || title.length > 40) throw new Error('Invalid title format');
+    if (typeof description !== 'string' || description.length > 100) throw new Error('Invalid description format');
+    if (typeof autor !== 'string' || autor.length > 30) throw new Error('Invalid autor format');
+}
 
-        if (typeof title !== 'string') {
-            throw new Error('Title must be a string')
-        }
-
-        if (title.length > 40 ) {
-            throw new Error ('Invalid title format');
-        }
-
-
-    }
-
-    function isValidDescription(description: unknown) {
-
-        if (typeof description!== 'string') {
-           throw new Error('Title must be a string')
-        }
-
-        if (description.length > 100) {
-            throw new Error ('Invalid description format');
-        }
-
-
-    }
-
-    function isValidAutor(autor: unknown) {
-
-        if (typeof autor !== 'string') {
-           throw new Error('Title must be a string')
-        }
-
-        if (autor.length > 30 ) {
-            throw new Error ('Invalid autor format');
-        }
-
-
-    }
 
 
     async function savePost(title: string, description: string, autor: string): Promise <void> {

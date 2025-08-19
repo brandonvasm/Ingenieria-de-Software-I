@@ -1,18 +1,19 @@
 import postgres from "postgres";
 import Post from "./post";
+import PostRepository from "./post-repository";
 
 export default class PostRegister {
+    private readonly repository: PostRepository;
+    constructor(repository: PostRepository) {
+    this.repository = repository;
+  }
+
+
     async run(title: string, description: string, autor: string) {
         const post = Post.create(title, description, autor)
-        await this.savePost(post.title.value, post.description.value, post.autor.value);
+        await this.repository.save(post);
     }
 
 
-    async savePost(title: string, description: string, autor: string) {
-           const connectionString = 'postgresql://postgres.wnkutridtrlrzngrksgo:Brandon12345678@aws-0-us-east-1.pooler.supabase.com:6543/postgres'
-           const sql = postgres(connectionString)
-   
-           await sql `INSERT INTO public.posts(title, description, autor) VALUES (${title},${description}, ${autor} )`;
-   
-    }
+    
 }

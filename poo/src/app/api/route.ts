@@ -1,7 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
+import postgres from 'postgres';
+
 
 export async function POST(request: NextRequest) { 
+
+
+    
     const data = await request.json();
+
+ 
+
+    isValidTitle(data.title);
+    isValidDescription(data.description);
+    isValidAutor(data.autor);
+
+    await savePost(data.title, data.description, data.autor);
+
+
+}
+
+
 
 
     function isValidTitle(title: unknown) {
@@ -42,11 +60,18 @@ export async function POST(request: NextRequest) {
 
 
     }
+
+
+    async function savePost(title: string, description: string, autor: string): Promise <void> {
+        const connectionString = 'postgresql://postgres.wnkutridtrlrzngrksgo:Brandon12345678@aws-0-us-east-1.pooler.supabase.com:6543/postgres'
+        const sql = postgres(connectionString)
+
+        
+
+    }
+
     
 
-    // proceso de la data
-    return NextResponse.json({
-        data 
-    })
-}
+    
+
 

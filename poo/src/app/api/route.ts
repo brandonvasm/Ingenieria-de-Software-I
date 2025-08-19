@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import postgres from 'postgres';
+import PostRegister from '../utils/post-register';
 
 
 export async function POST(request: NextRequest) { 
@@ -8,8 +9,9 @@ export async function POST(request: NextRequest) {
     try {
     const data = await request.json();
 
-    validatePost(data.title, data.description, data.autor);
-    await savePost(data.title, data.description, data.autor);
+    const registrar = new PostRegister();
+    await registrar.run(data.title, data.description, data.autor);
+
 
     NextResponse.json({
         message: 'Post saved succesfuly'
@@ -27,21 +29,10 @@ export async function POST(request: NextRequest) {
 
 
 
-    function validatePost(title: unknown, description: unknown, autor: unknown) {
-    if (typeof title !== 'string' || title.length > 40) throw new Error('Invalid title format');
-    if (typeof description !== 'string' || description.length > 100) throw new Error('Invalid description format');
-    if (typeof autor !== 'string' || autor.length > 30) throw new Error('Invalid autor format');
-}
+   
 
 
 
-    async function savePost(title: string, description: string, autor: string): Promise <void> {
-        const connectionString = 'postgresql://postgres.wnkutridtrlrzngrksgo:Brandon12345678@aws-0-us-east-1.pooler.supabase.com:6543/postgres'
-        const sql = postgres(connectionString)
-
-        await sql `INSERT INTO public.posts(title, description, autor) VALUES (${title},${description}, ${autor} )`;
-
-    }
 
     
 

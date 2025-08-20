@@ -17,3 +17,22 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
+
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const repository = new PostgresPostRepository();
+    await repository.delete(Number(params.id));
+    return NextResponse.json(
+        { message: 'Post deleted' }, 
+        { status: 200 });
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    return NextResponse.json(
+        { message: 'Error deleting post' },
+        { status: 500 });
+  }
+}
+
+
+
+

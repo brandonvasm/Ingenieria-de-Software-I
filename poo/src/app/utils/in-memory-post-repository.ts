@@ -31,6 +31,10 @@ export default class InMemoryPostRepository implements PostRepository {
     return Post.create(post.title, post.description, post.autor);
   }
 
+  async delete(id: number): Promise<void> {
+    this.posts = this.posts.filter(p => p.id !== id);
+  }
+
 
 
 }

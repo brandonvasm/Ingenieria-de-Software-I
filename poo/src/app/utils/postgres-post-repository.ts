@@ -34,6 +34,10 @@ export default class PostgresPostRepository implements PostRepository {
   return Post.create(row.title, row.description, row.autor);
   }
 
+  async delete(id: number): Promise<void> {
+    await this.sql`DELETE FROM public.posts WHERE id = ${id}`;
+  }
+
 
 
   

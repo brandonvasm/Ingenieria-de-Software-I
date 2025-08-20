@@ -22,4 +22,13 @@ export default class Post {
 
     return post;
   }
+
+
+  
+
+
+
 }
+
+
+

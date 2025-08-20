@@ -11,6 +11,11 @@ export default class InMemoryPostRepository implements PostRepository {
       autor: post.autor.value
     });
   }
+  
+   async getAll(): Promise<Post[]> {
+    return this.posts.map(p => Post.create(p.title, p.description, p.autor));
+  }
+
 }
 
 

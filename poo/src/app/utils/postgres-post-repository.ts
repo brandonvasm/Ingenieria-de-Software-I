@@ -14,4 +14,13 @@ export default class PostgresPostRepository implements PostRepository {
     await this.sql `INSERT INTO public.posts(title, description, autor) 
     VALUES (${post.title.value},${post.description.value}, ${post.autor.value} )`;
   }
+
+  
+  async getAll(): Promise<Post[]> {
+    const result = await this.sql<{ title: string; description: string; autor: string }[]>`SELECT * FROM public.posts`;
+    return result.map(row => Post.create(row.title, row.description, row.autor));
+  }
+
+  
 }
+

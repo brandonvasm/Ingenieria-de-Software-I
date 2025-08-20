@@ -21,6 +21,21 @@ export default class PostgresPostRepository implements PostRepository {
     return result.map(row => Post.create(row.title, row.description, row.autor));
   }
 
+  async update(id: number,data: { title?: string; description?: string; autor?: string }): Promise<Post> {
+  const result = await this.sql`
+    UPDATE public.posts SET 
+    title = ${data.title ?? null},
+    description = ${data.description ?? null},
+    autor = ${data.autor ?? null}
+    WHERE id = ${id}
+    RETURNING *;`;
+
+  const row = result[0];
+  return Post.create(row.title, row.description, row.autor);
+  }
+
+
+
   
 }
 
